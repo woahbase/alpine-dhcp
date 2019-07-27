@@ -193,6 +193,7 @@ docker run --rm -it \
   --entrypoint /bin/bash \
   --name docker_dhcp --hostname dhcp \
   -e PGID=1000 -e PUID=1000 \
+  -v config/dhcpd.conf:/etc/dhcp/dhcpd.conf \
   woahbase/alpine-dhcp:x86_64 \
   -ec dhcpd --version
 ```
