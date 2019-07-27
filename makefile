@@ -7,7 +7,7 @@ SHCOMMAND := /bin/bash
 SVCNAME   := dhcp
 USERNAME  := woahbase
 
-CMD       := dhcpd --version# used for testing or overridden when running
+CMD       := dhcpd --version 2>/dev/null# used for testing or overridden when running
 
 PUID       := $(shell id -u)
 PGID       := $(shell id -g)# gid 100(users) usually pre exists
@@ -17,6 +17,7 @@ DOCKEREPO := $(OPSYS)-$(SVCNAME)
 IMAGETAG  := $(USERNAME)/$(DOCKEREPO):$(ARCH)
 
 CNTNAME   := $(SVCNAME) # name for container name : docker_name, hostname : name
+INTERFACE := eth0
 
 BUILD_NUMBER := 0#assigned in .travis.yml
 BRANCH       := master
@@ -56,8 +57,8 @@ PORTFLAGS  := -p 67:67/udp -p 67:67/tcp
 
 RUNFLAGS   := -c 128 -m 256m \
 	--network=host \
-	-e INTERFACES=eth0 \
-	# -e PGID=$(PGID) -e PUID=$(PUID) \
+	-e INTERFACES=$(INTERFACE) \
+	-e PGID=$(PGID) -e PUID=$(PUID) \
 	#
 
 # -- }}}
@@ -111,7 +112,7 @@ stop :
 	docker stop -t 2 docker_$(CNTNAME)
 
 test :
-	docker run --rm -it $(NAMEFLAGS) $(MOUNTFLAGS) -e INTERFACES=eth0 --entrypoint $(SHCOMMAND) $(IMAGETAG) -ec $(CMD)
+	docker run --rm -it $(NAMEFLAGS) $(MOUNTFLAGS) -e INTERFACES=$(INTERFACE) --entrypoint $(SHCOMMAND) $(IMAGETAG) -ec $(CMD)
 
 # -- }}}
 
