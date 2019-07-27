@@ -111,7 +111,7 @@ stop :
 	docker stop -t 2 docker_$(CNTNAME)
 
 test :
-	docker run --rm -it $(NAMEFLAGS) $(MOUNTFLAGS) --entrypoint $(SHCOMMAND) $(IMAGETAG) -ec $(CMD)
+	docker run --rm -it $(NAMEFLAGS) $(MOUNTFLAGS) -e INTERFACES=eth0 --entrypoint $(SHCOMMAND) $(IMAGETAG) -ec $(CMD)
 
 # -- }}}
 
