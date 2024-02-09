@@ -1,0 +1,15 @@
+#!/usr/bin/with-contenv bash
+set -e
+
+# ensure dhcpd conf exists
+if [ ! -f /etc/dhcp/dhcpd.conf ];
+then
+    cp /defaults/dhcpd.conf /etc/dhcp/dhcpd.conf;
+fi;
+
+# ensure dhcpd leases exists
+if [ ! -f /var/lib/dhcp/dhcpd.leases ];
+then
+    mkdir -p /var/lib/dhcp;
+    touch /var/lib/dhcp/dhcpd.leases;
+fi;

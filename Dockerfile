@@ -1,9 +1,10 @@
-ARG DOCKERSRC=frommakefile
+# syntax=docker/dockerfile:1
 #
-FROM ${DOCKERSRC}
+ARG IMAGEBASE=frommakefile
 #
-# ARG PUID=1001
-# ARG PGID=1001
+FROM ${IMAGEBASE}
+#
+ENV INTERFACES=eth0
 #
 RUN set -xe \
     && apk add --no-cache --purge -uU tzdata dhcp \

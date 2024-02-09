@@ -1,0 +1,8 @@
+#!/usr/bin/with-contenv bash
+set -e
+
+DHCP_ARGS="${DHCP_ARGS:- -4 -f -d --no-pid}";
+INTERFACES="${INTERFACES:-eth0}"
+
+exec \
+    /usr/sbin/dhcpd ${DHCP_ARGS} -cf /etc/dhcp/dhcpd.conf ${INTERFACES}
