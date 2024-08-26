@@ -1,15 +1,28 @@
 #!/usr/bin/with-contenv bash
 set -e
 
+vecho () { if [ "${S6_VERBOSITY:-1}" -gt 0 ]; then echo "[$0] $@"; fi; }
+
+DHCP_CONF="${DHCP_CONF:-/etc/dhcp/dhcpd.conf}";
+DHCP_LEASES="${DHCP_LEASES:-/var/lib/dhcp/dhcpd.leases}";
+
+# make our folders
+vecho "Ensure configuration directories exist.";
+mkdir -p \
+    $(dirname $DHCP_CONF) \
+    $(dirname $DHCP_LEASES) \
+    ;
+
 # ensure dhcpd conf exists
-if [ ! -f /etc/dhcp/dhcpd.conf ];
+if [ ! -f "${DHCP_CONF}" ];
 then
-    cp /defaults/dhcpd.conf /etc/dhcp/dhcpd.conf;
+    vecho "Setting up default configuration at ${DHCP_CONF}.";
+    cp /defaults/dhcpd.conf ${DHCP_CONF};
 fi;
 
-# ensure dhcpd leases exists
-if [ ! -f /var/lib/dhcp/dhcpd.leases ];
+# ensure dhcpd leases file exists
+if [ ! -f "${DHCP_LEASES}" ];
 then
-    mkdir -p /var/lib/dhcp;
-    touch /var/lib/dhcp/dhcpd.leases;
+    vecho "Ensuring lease file exists.";
+    touch ${DHCP_LEASES};
 fi;

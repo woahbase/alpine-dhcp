@@ -7,7 +7,10 @@ FROM ${IMAGEBASE}
 ENV INTERFACES=eth0
 #
 RUN set -xe \
-    && apk add --no-cache --purge -uU tzdata dhcp \
+    && apk add --no-cache --purge -uU \
+        dhcp \
+        tzdata \
+    && mkdir -p /var/lib/dhcp/ \
     && touch /var/lib/dhcp/dhcpd.leases \
     && rm -rf /var/cache/apk/* /tmp/*
 #

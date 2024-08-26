@@ -1,8 +1,15 @@
 #!/usr/bin/with-contenv bash
 set -e
 
+DHCP_CONF="${DHCP_CONF:- /etc/dhcp/dhcpd.conf}";
+DHCP_LEASES="${DHCP_LEASES:-/var/lib/dhcp/dhcpd.leases}";
 DHCP_ARGS="${DHCP_ARGS:- -4 -f -d --no-pid}";
 INTERFACES="${INTERFACES:-eth0}"
 
 exec \
-    /usr/sbin/dhcpd ${DHCP_ARGS} -cf /etc/dhcp/dhcpd.conf ${INTERFACES}
+    /usr/sbin/dhcpd \
+        -cf ${DHCP_CONF} \
+        -lf ${DHCP_LEASES} \
+        ${DHCP_ARGS} \
+        ${INTERFACES} \
+    ;
